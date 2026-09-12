@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redtom's Tools - WoW 편의성 애드온</title>
+  <style>
+    :root {
+      --bg-main: #0d0f12;
+      --bg-card: #161a20;
+      --bg-card-hover: #1c222b;
+      --border-color: #2a3340;
+      --accent-gold: #f3be44;
+      --accent-blue: #4aa3ff;
+      --text-main: #e6ebf2;
+      --text-muted: #8b9bb0;
+      --code-bg: #090b0e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      line-height: 1.6;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    header {
+      background: linear-gradient(180deg, #1f2633 0%, var(--bg-card) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 36px 24px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(180deg, #ffd86b 0%, var(--accent-gold) 100%);
+      color: #111;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .command-box {
+      margin-top: 20px;
+      display: inline-block;
+      background-color: var(--code-bg);
+      border: 1px dashed var(--border-color);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .command-box code {
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    section h2 {
+      font-size: 1.3rem;
+      color: var(--accent-gold);
+      border-left: 4px solid var(--accent-gold);
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .showcase-item {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .showcase-item .img-wrapper {
+      background-color: #090b0e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px;
+      /* 고정 height 제거 -> 이미지 크기에 맞춰 높이 자동 조절 */
+      width: 100%;
+    }
+
+    /* 2개 이미지를 한 곳에 나란히 담는 그리드 컨테이너 */
+    .showcase-item .img-wrapper.dual {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 16px;
+      width: 100%;
+    }
+
+    .showcase-item .img-wrapper.dual img {
+      width: 100%;
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+    }
+
+    .showcase-item img {
+      /* 가로 폭은 부모 박스에 맞추되 원본보다 커지지 않게 제한 */
+      width: auto;
+      max-width: 100%;
+      /* 세로로 너무 긴 이미지(순간이동 창 등)가 화면 전체를 채우지 않도록 최대 높이만 지정 */
+      max-height: 650px;
+      height: auto;
+      border-radius: 6px;
+      display: block;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .showcase-desc {
+      padding: 16px 20px;
+    }
+
+    .showcase-desc h4 {
+      font-size: 1rem;
+      color: var(--accent-blue);
+      margin-bottom: 6px;
+    }
+
+    .showcase-desc p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .install-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .install-box ol {
+      margin-left: 20px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .install-box li {
+      margin-bottom: 8px;
+    }
+
+    .install-box code {
+      background-color: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent-gold);
+      font-size: 0.85rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Redtom's Tools</h1>
+      <p>와우 플레이에 필요한 핵심 기능들을 통합 제공하는 경량 편의성 애드온</p>
+      <a href="https://github.com/Redtom213/RedtomsTools/releases/latest/download/RedtomsTools-v1.1.0.zip" target="_blank" class="btn-download">
+        최신 버전 다운로드 (GitHub Release)
+      </a>
+      <div class="command-box">
+        설정창 열기: <code>/rtt</code> 또는 <code>/redtom</code>
+      </div>
+    </header>
+
+    <section>
+      <h2>주요 기능</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>던전·확장팩 순간이동 패널</h3>
+          <p>ESC 메뉴 오픈 시 역대 확장팩 및 현재 시즌 쐐기 던전 순간이동 포탈이 보기 편한 매트릭스 형태로 정렬됩니다.</p>
+        </div>
+        <div class="feature-card">
+          <h3>파티 유틸 및 직업 현황</h3>
+          <p>파티 찾기(PVE) 창 하단에 독/마법/저주/질병 해제 클래스와 블러드, 전투부활, 시너지 보유 인원을 한눈에 확인합니다.</p>
+        </div>
+        <div class="feature-card">
+          <h3>블러드 & 전투부활 추적기</h3>
+          <p>현재 사용된 블러드 지속시간 및 디버프 상태, 사용 가능한 전부 횟수를 미니 아이콘으로 실시간 표시합니다.</p>
+        </div>
+        <div class="feature-card">
+          <h3>카메라 시점 보정 & 최대 시야 확장</h3>
+          <p>카메라 Tilt 각도(0~1.0)와 탑다운 뷰 감쇄율 조절, 최대 시야 거리(최대 2.6) 확장을 네이티브 UI로 제어합니다.</p>
+        </div>
+        <div class="feature-card">
+          <h3>UI 크기 조절 & 아이템 파괴 간소화</h3>
+          <p>ESC 메뉴 및 말머리(대화 연출창) 배율을 자유롭게 변경하고, 아이템 파괴 시 텍스트 입력창 없이 즉시 확인이 가능합니다.</p>
+        </div>
+        <div class="feature-card">
+          <h3>파티 탐색하기 바로가기</h3>
+          <p>파티를 생성한 상태에서도 지원자 목록 하단의 '파티 탐색하기' 버튼으로 파티 리스트를 자유롭게 확인 및 복귀할 수 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>실제 게임 적용 모습</h2>
+      <div class="showcase-grid">
+        <div class="showcase-item">
+          <div class="img-wrapper">
+            <!-- image_54dcca.jpg 경로를 입력하세요 -->
+            <img src="183252c3-6a96-4f11-b242-9defb47dcd53.jfif" alt="순간이동 도우미 패널" />
+          </div>
+          <div class="showcase-desc">
+            <h4>확장팩 및 시즌 던전 순간이동 패널</h4>
+            <p>ESC 키를 누르면 우측에 오리지널부터 최신 시즌까지의 던전 순간이동 아이콘이 직관적으로 자동 표시됩니다.</p>
+          </div>
+        </div>
+
+        <div class="showcase-item">
+          <div class="img-wrapper">
+            <!-- image_54e791.jpg 경로를 입력하세요 -->
+            <img src="0dead2e6-5434-4521-8169-d49c14a227f9.jfif" alt="파티 찾기 직업 현황 및 탐색 버튼" />
+          </div>
+          <div class="showcase-desc">
+            <h4>파티 유틸리티 현황판 및 파티 중 탐색 버튼</h4>
+            <p>1) 파티 찾기 창에서 현재 파티의 해제/버프 현황을 표시 2) 하단 "파티 탐색하기" 버튼으로 파티 중에도 탐색 창을 오갈 수 있습니다.</p>
+
+          </div>
+        </div>
+
+        <div class="showcase-item">
+          <div class="img-wrapper">
+            <!-- image_54dfef.png 경로를 입력하세요 -->
+            <img src="81af3a9f-a8e5-45df-803c-993f8943bd42.png" alt="블러드 및 전투부활 아이콘" style="max-height: 120px; object-fit: contain;" />
+          </div>
+          <div class="showcase-desc">
+            <h4>블러드 / 전투부활 실시간 현황</h4>
+            <p>블러드 쿨다운(만족감)과 전투부활 잔여 횟수 화면에 배치해 줍니다.</p>
+          </div>
+        </div>
+
+        <div class="showcase-item">
+          <div class="img-wrapper dual">
+            <img src="478e8f8b-1415-4699-998d-ba456c0a6c00.jfif" alt="설정창 상단 (카메라 / 인터페이스 / 말풍선)" />
+            <img src="11b55ca8-93b7-4717-94bf-442df4b83fbc.jfif" alt="설정창 하단 (파티 및 던전 / 추적기 / 관리)" />
+          </div>
+          <div class="showcase-desc">
+            <h4>옵션 창</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>설치 방법</h2>
+      <div class="install-box">
+        <ol>
+          <li>상단의 <b>애드온 다운로드</b> 버튼을 눌러 압축 파일(ZIP)을 받습니다.</li>
+          <li>와우 설치 폴더 내 <code>_retail_\Interface\AddOns\</code> 경로로 이동합니다.</li>
+          <li>압축을 풀어 <code>RedtomsTools</code> 폴더 통째로 <code>AddOns</code> 폴더 안에 붙여넣습니다.</li>
+          <li>게임 내에서 <code>/rtt</code> 또는 <code>/redtom</code>을 입력하여 옵션 창을 열고 원하는 기능을 설정합니다.</li>
+        </ol>
+      </div>
+    </section>
+
+    <footer>
+      Redtom's Tools &middot; World of Warcraft Addon
+    </footer>
+  </div>
+
+</body>
+</html>
